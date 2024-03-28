@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>キッチンタイマー</title>
+</head>
+<body>
+    <input type="time" id="timer" name="timer" step="1" value="00:00:00"><br>
+    <button id="start_btn" onclick="startTimer()">タイマー スタート</button>
+    <button id="clear_btn">クリア</button>
+    <input type="text" id="commentInput" placeholder="コメントを入力してください">
+    <p>
+    <div id="message" style="text-align:center; font-size:300%;">00:00:00</div>
+    </p>
+
+<script>
+    const timer = document.getElementById("timer");
+    const start_btn = document.getElementById("start_btn");
+    const clear_btn = document.getElementById("clear_btn");
+    const message = document.getElementById("message");
+
+    var t; // setInterval()用の変数
+    var timeLeft; // 残り時間の変数
+
+    function startTimer() {
+        var comment = document.getElementById("commentInput").value;
+        var timerValue = timer.value;
+        timeLeft = time2sec(timerValue);
+
+        t = setInterval(function() {
+            --timeLeft;
+            var m = sec2time(timeLeft);
+            message.innerHTML = m;
+
+            if (timeLeft == 0) {
+                clearInterval(t);
+                start_btn.innerHTML = "タイマー スタート";
+                displayComment(comment);
+            }
+        }, 1000);
+        
+        start_btn.innerHTML = "ストップ";
+    }
+
+    function time2sec(time) {
+        var result = time.split(":");
+        var h = parseInt(result[0], 10);
+        var m = parseInt(result[1], 10);
+        var s = parseInt(result[2], 10);
+
+        return h * 3600 + m * 60 + s;
+    }
+
+    function sec2time(sec) {
+        var h = parseInt(sec / 3600, 10);
+        var m = parseInt(sec / 60, 10) % 60;
+        var s = sec % 60;
+
+        return `${('00' + h).slice(-2)}:${('00' + m).slice(-2)}:${('00' + s).slice(-2)}`;
+    }
+
+    function displayComment(comment) {
+        var commentDisplay = document.getElementById("commentDisplay");
+        commentDisplay.innerHTML = "<span style='font-size: 200px;'>タイマー終了！ " + comment + "</span>";
+    }
+</script>
+
+<div id="commentDisplay"></div>
+
+</body>
+</html>
+
